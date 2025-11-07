@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitkus</title>
+    <style>
+        /* Define the custom font */
+        @font-face {
+            font-family: 'MyCustomFont';
+            src: url('VCR.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center content vertically */
+            min-height: 100vh;
+            font-family: 'MyCustomFont', Arial, sans-serif;
+            overflow-y: auto;
+            padding-top: 20px;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            text-align: center; /* Center text */
+        }
+
+        .rainbow-text {
+            font-size: 4em;
+            font-weight: bold;
+            background-image: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet, red);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow 8s linear infinite;
+            background-size: 800% 100%;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        img {
+            margin-top: 20px;
+            width: 300px;
+            height: auto;
+        }
+
+        .center-gif {
+            display: block;
+            margin: 20px auto;
+        }
+
+        video {
+            display: block;
+            margin: 20px auto; /* This will center the video horizontally */
+            width: 100%; /* Optional: Ensures video resizes properly on smaller screens */
+            max-width: 560px; /* Optional: Restricts video width to prevent it from getting too large */
+        }
+
+        /* Sound Icon Styling */
+        #sound-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            filter: invert(100%); /* Makes black icons white */
+        }
+
+        /* Media query for mobile devices */
+        @media screen and (max-width: 600px) {
+            .rainbow-text {
+                font-size: 2em;
+            }
+
+            img {
+                width: 200px;
+            }
+
+            body {
+                padding-top: 10px;
+            }
+
+            #sound-icon {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="rainbow-text">Vitkus Romas</div>
+
+    <audio id="bg-music" autoplay loop muted>
+        <source src="soviet.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <img class="center-gif" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDQwNGFrbTloaHE2Y2htcG1wbHh3MzE4bnRqeWxzYm5icWptOXBjMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CHm5o28T3vrolUsHRV/giphy.gif" alt="Vitkus">
+    <img class="center-gif" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmlhMWE1ejl4dnliY2hkdDV2MzdnZzkxMGl1dHd5aDBwOXdnaTRsYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XjQhbd8NQvGyNHWvCy/giphy.gif" alt="Another GIF">
+
+    <video width="560" height="420" controls>
+        <source src="zopa.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- New MP4 video below everything -->
+    <video width="560" height="420" controls>
+        <source src="testosteronas.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Sound Toggle Icon -->
+    <img id="sound-icon" src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Mute_Icon.svg" onclick="toggleSound()">
+
+    <script>
+        const music = document.getElementById("bg-music");
+        const soundIcon = document.getElementById("sound-icon");
+
+        function toggleSound() {
+            if (music.muted) {
+                music.muted = false;
+                music.play(); // Force play on unmute
+                soundIcon.src = "https://upload.wikimedia.org/wikipedia/commons/2/21/Speaker_Icon.svg"; // Unmute icon
+            } else {
+                music.muted = true;
+                soundIcon.src = "https://upload.wikimedia.org/wikipedia/commons/3/3f/Mute_Icon.svg"; // Mute icon
+            }
+        }
+    </script>
+</body>
+</html>

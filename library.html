@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="star.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <style>
+        @font-face {
+            font-family: 'VCRFont';
+            src: url('VCR.ttf') format('truetype');
+        }
+
+        html { font-size: clamp(14px, 1.5vw, 16px); }
+
+        body {
+            font-family: 'VCRFont', Arial, sans-serif;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(0.5rem, 2vw, 1rem);
+            text-align: center;
+            max-width: 90%;
+            margin: 0 auto;
+            overflow-x: hidden;
+        }
+
+        .rainbow-text {
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: bold;
+            background-image: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet);
+            background-size: 500% 100%;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: rainbow-animation 10s ease-in-out infinite;
+            margin-bottom: clamp(0.5rem, 2vw, 1rem);
+        }
+
+        @keyframes rainbow-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .media-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* responsive grid */
+            gap: clamp(0.5rem, 1vw, 1rem);
+            width: 100%;
+            justify-items: center;
+            margin-top: clamp(0.5rem, 2vw, 1rem);
+            background-color: rgba(0,0,0,0.5);
+            padding: clamp(0.5rem, 1vw, 1rem);
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        .media-item {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        /* Remove hover effects completely */
+        .media-item:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .library-button {
+            padding: clamp(0.6rem, 1.5vw, 1rem);
+            font-family: 'VCRFont', sans-serif !important;
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .library-button:hover,
+        .library-button:active {
+            transform: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            overflow: auto;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            max-width: 95%;
+            max-height: 95%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content img,
+        .modal-content video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .rainbow-text { font-size: clamp(1.5rem, 10vw, 3rem); }
+            .media-item { max-width: 90%; }
+            .library-button { width: 80%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="rainbow-text">Vitkaus Biblioteka</div>
+    <div class="media-container" id="media-container"></div>
+
+    <div id="myModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" id="modal-content"></div>
+    </div>
+
+    <img src="back.gif" alt="Back" class="library-button" onclick="goBack()">
+
+    <script>
+        let currentVideo = null;
+
+        const libraryMedia = [
+            { type: 'img', src: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDQwNGFrbTloaHE2Y2htcG1wbHh3MzE4bnRqeWxzYm5icWptOXBjMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CHm5o28T3vrolUsHRV/giphy.gif', alt: 'Vitkus GIF' },
+            { type: 'video', src: 'zopa.mp4' },
+            { type: 'img', src: 'sikna.jpg', alt: 'Sikna' },
+            { type: 'img', src: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmlhMWE1ejl4dnliY2hkdDV2MzdnZzkxMGl1dHd5aDBwOXdnaTRsYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XjQhbd8NQvGyNHWvCy/giphy.gif', alt: 'Another GIF' },
+            { type: 'video', src: 'testosteronas.mp4' }
+        ];
+
+        const container = document.getElementById('media-container');
+
+        libraryMedia.forEach(item => {
+            let element;
+            if (item.type === 'img') {
+                element = document.createElement('img');
+                element.src = item.src;
+                element.alt = item.alt || '';
+            } else if (item.type === 'video') {
+                element = document.createElement('video');
+                element.innerHTML = `<source src="${item.src}" type="video/mp4">`;
+            }
+            element.className = 'media-item';
+            element.onclick = () => openModal(element);
+            container.appendChild(element);
+        });
+
+        function openModal(element) {
+            const modal = document.getElementById('myModal');
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = '';
+
+            if (element.tagName === 'IMG') {
+                const img = document.createElement('img');
+                img.src = element.src;
+                modalContent.appendChild(img);
+            } else if (element.tagName === 'VIDEO') {
+                const video = document.createElement('video');
+                video.src = element.querySelector('source').src;
+                video.controls = true;
+                modalContent.appendChild(video);
+                video.play();
+                currentVideo = video;
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeModal(event) {
+            const modal = document.getElementById('myModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                if (currentVideo) {
+                    currentVideo.pause();
+                    currentVideo.currentTime = 0;
+                    currentVideo = null;
+                }
+            }
+        }
+
+        function goBack() { window.history.back(); }
+    </script>
+</body>
+</html>

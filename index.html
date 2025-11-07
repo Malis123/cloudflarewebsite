@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/png" href="star.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitkus</title>
+    <style>
+        @font-face {
+            font-family: 'VCRFont';
+            src: url('VCR.ttf') format('truetype');
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: 'VCRFont', Arial, sans-serif;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        .rainbow-text {
+            font-size: 4em;
+            font-weight: bold;
+            background-image: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet);
+            background-size: 500% 100%;
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: rainbow-animation 10s ease-in-out infinite;
+        }
+
+        @keyframes rainbow-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .corrupted-text {
+            font-size: 1.8em;
+            color: yellow;
+            text-shadow: 0 0 10px yellow, 0 0 20px yellow;
+            letter-spacing: 2px;
+            margin-top: 20px;
+            font-family: monospace;
+            min-width: 20ch;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .center-gif {
+            display: block;
+            margin: 30px auto;
+            width: 350px;
+            height: auto;
+        }
+
+        #sound-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            filter: invert(100%);
+        }
+
+        /* Arrows + fire container */
+        .title-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .title-container img.arrow {
+            width: 50px;
+            height: auto;
+        }
+
+        .left-arrow {
+            transform: rotate(0deg); /* points right */
+        }
+
+        .right-arrow {
+            transform: rotate(180deg); /* points left */
+        }
+
+        /* Fire above text */
+        .text-with-fire {
+            position: relative;
+            display: inline-block;
+        }
+
+        .text-with-fire img.fire {
+            position: absolute;
+            bottom: 100%; /* place above the text */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: auto;
+            pointer-events: none;
+        }
+
+        /* Enter GIF */
+        .enter-gif {
+            cursor: pointer;
+            width: 200px; /* adjust as needed */
+            height: auto;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <audio id="bg-music" autoplay loop>
+        <source src="soviet.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <img id="sound-icon" src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Mute_Icon.svg"
+        onclick="toggleSound()">
+
+    <!-- Title with arrows and fire above -->
+    <div class="title-container">
+        <img src="arrow.gif" alt="Left Arrow" class="arrow left-arrow">
+        <div class="text-with-fire">
+            <div class="rainbow-text">Vitkus Romas</div>
+            <img src="fire.gif" alt="Fire Above" class="fire">
+        </div>
+        <img src="arrow.gif" alt="Right Arrow" class="arrow right-arrow">
+    </div>
+
+    <div id="corrupted" class="corrupted-text"></div>
+
+    <img class="center-gif"
+        src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDQwNGFrbTloaHE2Y2htcG1wbHh3MzE4bnRqeWxzYm5icWptOXBjMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CHm5o28T3vrolUsHRV/giphy.gif"
+        alt="Vitkus">
+
+    <!-- Enter GIF replacing the button -->
+    <img src="enter.gif" alt="Enter" class="enter-gif" onclick="enterLibrary()">
+
+    <script>
+        const music = document.getElementById("bg-music");
+        const soundIcon = document.getElementById("sound-icon");
+
+        function toggleSound() {
+            if (music.muted) {
+                music.muted = false;
+                music.play();
+                soundIcon.src = "https://upload.wikimedia.org/wikipedia/commons/2/21/Speaker_Icon.svg";
+            } else {
+                music.muted = true;
+                soundIcon.src = "https://upload.wikimedia.org/wikipedia/commons/3/3f/Mute_Icon.svg";
+            }
+        }
+
+        // Corrupted randomizer
+        const corrupted = document.getElementById("corrupted");
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*(){}[]<>|~≠∆ΩЖŁß¢µ";
+
+        function randomCorrupted() {
+            let text = '';
+            for (let i = 0; i < 8; i++) {
+                text += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            corrupted.textContent = text;
+        }
+
+        // Insane speed change (10ms)
+        setInterval(randomCorrupted, 10);
+
+        // Enter GIF click
+        function enterLibrary() {
+            window.location.href = "library.html";
+        }
+    </script>
+</body>
+
+</html>
